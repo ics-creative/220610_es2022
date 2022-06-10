@@ -14,7 +14,6 @@ async function start() {
     await load();
   } catch (error) {
     console.log(error);
-    // console.log(error.cause); // さらに奥の情報を追跡できる
   }
 }
 
@@ -23,7 +22,7 @@ async function load() {
     const result = await loadJson();
     console.log(result);
   } catch (error) {
-    throw new Error("読み込みに失敗！", { cause: error });
+    throw new Error("読み込みに失敗！");
   }
 }
 
@@ -33,11 +32,11 @@ async function loadJson() {
     data = await fetch("example.json");
   } catch (error) {
     // ネットワークがオフラインの場合
-    throw new Error("fetchに失敗しました。", { cause: error });
+    throw new Error("fetchに失敗しました。");
   }
 
   if (data.ok === false) {
-    // 404 の場合等（この場合は、明示的なエラーなのでcause未指定）
+    // 404 の場合等
     throw new Error("ファイルの読み込みに失敗しました。");
   }
 
@@ -47,7 +46,7 @@ async function loadJson() {
     return json;
   } catch (error) {
     // JSONのパースに失敗
-    throw new Error("JSONデータの展開に失敗しました。", { cause: error });
+    throw new Error("JSONデータの展開に失敗しました。");
   }
 }
     </script>
