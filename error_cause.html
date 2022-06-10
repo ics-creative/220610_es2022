@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Error Cause</title>
+  <style>
+    body {
+        font-family: sans-serif;
+    }
+  </style>
+  <script>
+async function loadJson() {
+  let data;
+  try {
+    data = await fetch("example.json");
+  } catch (error) {
+    // ネットワークがオフラインの場合
+    throw new Error("fetchに失敗しました。", { cause: error });
+  }
+
+  if(data.ok === false){
+    // 404 の場合等（この場合は、明示的なエラーなのでcause未指定）
+    throw new Error("ファイルの読み込みに失敗しました。");
+  }
+
+  let json;
+  try {
+    json = await data.json();
+    return json;
+  } catch (error) {
+    // JSONのパースに失敗
+    throw new Error("JSONデータの展開に失敗しました。", { cause: error });
+  }
+}
+async function load() {
+  try {
+    const result = await loadJson();
+    console.log(result);
+  } catch (error) {
+    throw new Error("読み込みに失敗！", { cause: error });
+  }
+}
+
+async function start() {
+  try {
+    await load();
+  } catch (error) {
+    console.log(error); // "読み込みに失敗！"
+    // console.log(error.cause); // さらに奥の情報を追跡できる
+  }
+}
+
+  </script>
+
+</head>
+<body>
+
+  <button onclick="start()">ファイルを読み込む</button>
+
+  <p>Consoleパネルを確認ください</p>
+
+</body>
+</html>

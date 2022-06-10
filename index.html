@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script type="module">
+  // ES2022で可能になった書き方
+  const data = await fetch("./example/data.json");
+  const object = await data.json();
+  console.log(object)
+</script>
+</body>
+</html>
